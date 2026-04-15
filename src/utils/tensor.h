@@ -13,7 +13,7 @@ enum Device{
     CPU_PINNED,
     CPU,
     GPU
-}
+};
 
 enum DataType
 {
@@ -74,6 +74,7 @@ struct Tensor{
         }
         return std::accumulate(shape.begin(), shape.end(), (int)1, std::multiplies<int>());
     }
+    template<typename T>
     TensorWrapper<T>* as(){
         return static_cast<TensorWrapper<T>*>(this);
     }
