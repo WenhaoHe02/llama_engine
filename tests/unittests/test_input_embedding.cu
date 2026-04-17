@@ -44,7 +44,7 @@ bool checkResults(float* h_output, float* d_output, const int output_size) {
     float* d_output_cpu = (float*) malloc(output_size * sizeof(float)); // prepare for cpu check
     CHECK(cudaMemcpy(d_output_cpu, d_output, output_size * sizeof(float), cudaMemcpyDeviceToHost));
     for (int i = 0; i < output_size; ++i) {
-        if (fabs(d_output_cpu[i] - h_output[i]) > 1e5) {
+        if (fabs(d_output_cpu[i] - h_output[i]) > 1e-5) {
             std::cout << "Dev : ";
             for (int j = max(0, i - 10); j < min(output_size, i + 10); ++j) {
                 std::cout << d_output_cpu[i];
@@ -109,7 +109,7 @@ int main(int argc, char *argv[]) {
         DataType type_int = getTensorType<int>();
         TensorWrapper<int>* input_ids = new TensorWrapper<int>(Device::GPU, type_int, {max_context_token_num},    d_input);
         TensorWrapper<float>* output = new TensorWrapper<float>(Device::GPU, type_float, {max_context_token_num,     hidden_size}, d_output);
-        EmbeddingWeight<float> emb_table;
+        EmbeddingWeights<float> emb_table;
         emb_table.data = d_table;
         launchInputEmbedding(input_ids, output, &emb_table);
         CHECK(cudaMemcpy(h_output, output->data, output_size * sizeof(float), cudaMemcpyDeviceToHost));
@@ -163,7 +163,7 @@ int main(int argc, char *argv[]) {
         DataType type_int = getTensorType<int>();
         TensorWrapper<int>* input_ids = new TensorWrapper<int>(Device::GPU, type_int, {max_context_token_num},    d_input);
         TensorWrapper<half>* output = new TensorWrapper<half>(Device::GPU, type_half, {max_context_token_num,     hidden_size}, d_output);
-        EmbeddingWeight<half> emb_table;
+        EmbeddingWeights<half> emb_table;
         emb_table.data = d_table;
         launchInputEmbedding(input_ids, output, &emb_table);
         CHECK(cudaMemcpy(h_output, output->data, output_size * sizeof(half), cudaMemcpyDeviceToHost));

@@ -18,12 +18,12 @@ do \
     } \
     while (0)
 
-[[noreturn]] inline void throw_runtime_error( char* const file,  int const line, std::string const& info = ""){
+[[noreturn]] inline void throw_runtime_error(const char* file, int const line, std::string const& info = ""){
     throw std::runtime_error(std::string("[oneLLM][ERROR] ") + info + " Assertion fail: " + file + ":"
                              + std::to_string(line) + " \n");
 }
 
-inline void llm_assert(bool result, char* const file, int const line, std::string const& info = ""){
+inline void llm_assert(bool result, const char* file, int const line, std::string const& info = ""){
     if (!result) {
         throw_runtime_error(file, line, info);
     }
